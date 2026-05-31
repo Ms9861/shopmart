@@ -1,1302 +1,718 @@
-```
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlippCart - Online Shopping</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2874f0;
-            --secondary-color: #fb641b;
-            --light-gray: #f1f3f6;
-            --dark-gray: #878787;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        body {
-            background-color: var(--light-gray);
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-        }
-        
-        .header-container {
-            display: flex;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: flex-end;
-            margin-right: 20px;
-            cursor: pointer;
-        }
-        
-        .logo img {
-            height: 22px;
-        }
-        
-        .logo .logo-text {
-            font-size: 11px;
-            font-style: italic;
-            margin-left: 2px;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        .logo .plus {
-            color: #ffe500;
-            font-weight: bold;
-        }
-        
-        .search-bar {
-            flex: 1;
-            display: flex;
-            margin-right: 20px;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 10px 15px;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            border-radius: 2px 0 0 2px;
-        }
-        
-        .search-bar button {
-            background-color: white;
-            border: none;
-            padding: 0 20px;
-            background-color: #fff;
-            border-radius: 0 2px 2px 0;
-            cursor: pointer;
-        }
-        
-        .search-bar button i {
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-        }
-        
-        .action-btn {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            margin: 0 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .action-btn i {
-            font-size: 18px;
-        }
-        
-        .action-btn span {
-            font-size: 12px;
-        }
-        
-        .login-btn, .more-btn {
-            color: var(--primary-color);
-            background-color: white;
-            padding: 5px 30px;
-            border-radius: 2px;
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -8px;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: scale(0.9);
-        }
-        
-        /* Main Content */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 15px;
-        }
-        
-        /* Categories */
-        .categories {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 80px;
-            margin: 0 10px;
-            cursor: pointer;
-        }
-        
-        .category img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-        
-        .category span {
-            font-size: 12px;
-        }
-        
-        /* Deals Section */
-        .deals-section {
-            margin-bottom: 20px;
-        }
-        
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: white;
-            margin-bottom: 2px;
-        }
-        
-        .section-title h2 {
-            font-size: 18px;
-            font-weight: 500;
-        }
-        
-        .view-all {
-            color: var(--primary-color);
-            font-weight: 500;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .deals-container {
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background-color: white;
-            padding: 20px 10px;
-        }
-        
-        .deals-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .deal-item {
-            min-width: 220px;
-            margin: 0 5px;
-            padding: 15px;
-            cursor: pointer;
-            text-align: center;
-            border: 1px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .deal-item:hover {
-            border: 1px solid var(--primary-color);
-        }
-        
-        .deal-img {
-            height: 150px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-        
-        .deal-title {
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #212121;
-            height: 40px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
-        .deal-price {
-            font-weight: 500;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .deal-discount {
-            color: #388e3c;
-            font-size: 13px;
-        }
-        
-        .deal-desc {
-            font-size: 12px;
-            color: var(--dark-gray);
-            margin-top: 5px;
-        }
-        
-        /* Products Section */
-        .products-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .product-card {
-            background-color: white;
-            padding: 15px;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .product-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .product-img-container {
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .product-img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .product-title {
-            font-size: 14px;
-            color: #212121;
-            margin-bottom: 5px;
-            height: 40px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
-        .product-price {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        
-        .current-price {
-            font-weight: 500;
-            font-size: 16px;
-        }
-        
-        .original-price {
-            font-size: 14px;
-            color: var(--dark-gray);
-            text-decoration: line-through;
-            margin-left: 8px;
-        }
-        
-        .discount {
-            color: #388e3c;
-            font-size: 13px;
-            margin-left: 8px;
-        }
-        
-        .rating {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: white;
-            background-color: #388e3c;
-            width: fit-content;
-            padding: 2px 4px 2px 6px;
-            border-radius: 3px;
-        }
-        
-        .rating i {
-            font-size: 10px;
-            margin-left: 4px;
-        }
-        
-        .delivery {
-            font-size: 12px;
-            color: var(--dark-gray);
-            margin-top: 5px;
-        }
-        
-        /* Cart Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: none;
-            justify-content: flex-end;
-        }
-        
-        .modal-container {
-            background-color: white;
-            width: 400px;
-            max-width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-            transform: translateX(100%);
-            transition: transform 0.3s ease-out;
-        }
-        
-        .modal-overlay.active {
-            display: flex;
-        }
-        
-        .modal-overlay.active .modal-container {
-            transform: translateX(0);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .modal-title {
-            font-size: 18px;
-            font-weight: 500;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--dark-gray);
-        }
-        
-        .cart-items {
-            padding: 15px;
-        }
-        
-        .cart-item {
-            display: flex;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .cart-item-img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-right: 15px;
-        }
-        
-        .cart-item-details {
-            flex: 1;
-        }
-        
-        .cart-item-title {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        
-        .cart-item-price {
-            font-weight: 500;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        .quantity-btn {
-            width: 25px;
-            height: 25px;
-            border: 1px solid #e0e0e0;
-            background-color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .quantity {
-            padding: 0 10px;
-        }
-        
-        .remove-btn {
-            color: var(--primary-color);
-            font-size: 12px;
-            margin-top: 5px;
-            cursor: pointer;
-        }
-        
-        .cart-summary {
-            padding: 20px;
-            border-top: 1px solid #e0e0e0;
-            position: sticky;
-            bottom: 0;
-            background-color: white;
-        }
-        
-        .total {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .total-label {
-            color: var(--dark-gray);
-        }
-        
-        .total-amount {
-            font-weight: 500;
-            font-size: 18px;
-        }
-        
-        .checkout-btn {
-            width: 100%;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            font-weight: 500;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-        
-        .empty-cart {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--dark-gray);
-        }
-        
-        .empty-cart i {
-            font-size: 50px;
-            margin-bottom: 20px;
-            color: #e0e0e0;
-        }
-        
-        /* Product Details Modal */
-        .product-modal .modal-container {
-            width: 800px;
-            max-width: 95%;
-        }
-        
-        .product-details {
-            display: flex;
-            padding: 20px;
-        }
-        
-        .product-gallery {
-            width: 40%;
-            margin-right: 30px;
-        }
-        
-        .main-image {
-            width: 100%;
-            height: 400px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-        
-        .thumbnails {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .thumbnail {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border: 1px solid #e0e0e0;
-            cursor: pointer;
-        }
-        
-        .product-info {
-            flex: 1;
-        }
-        
-        .product-name {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: #212121;
-        }
-        
-        .product-subtitle {
-            font-size: 14px;
-            color: var(--dark-gray);
-            margin-bottom: 15px;
-        }
-        
-        .product-rating {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .rating-text {
-            margin-left: 10px;
-            color: var(--dark-gray);
-            font-size: 14px;
-        }
-        
-        .price-container {
-            background-color: #f5f5f5;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .selected-price {
-            font-size: 24px;
-            font-weight: 500;
-        }
-        
-        .inclusive {
-            color: var(--dark-gray);
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        .offers {
-            margin-bottom: 20px;
-        }
-        
-        .offer-title {
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #212121;
-        }
-        
-        .offer-item {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        
-        .offer-icon {
-            margin-right: 10px;
-            color: var(--secondary-color);
-        }
-        
-        .add-to-cart-btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-weight: 500;
-            border-radius: 2px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-wrap: wrap;
-                padding-bottom: 10px;
-            }
-            
-            .search-bar {
-                order: 3;
-                margin: 15px 0 0;
-                width: 100%;
-            }
-            
-            .products-container {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
-            
-            .product-img-container {
-                height: 150px;
-            }
-            
-            .product-modal .modal-container {
-                width: 100%;
-            }
-            
-            .product-details {
-                flex-direction: column;
-            }
-            
-            .product-gallery {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 20px;
-            }
-            
-            .main-image {
-                height: 250px;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BHATI BATTERY Advanced Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/html5-qrcode">
+/* ===== BHATI BATTERY PREMIUM CUSTOM SOUNDS =====
+   These are custom browser-generated tones inspired by payment success sounds.
+   They do not copy PhonePe, Paytm, or Google Pay original audio.
+*/
+
+function playTone(freq, duration, delay = 0, volume = 0.65, type = "sine") {
+  setTimeout(() => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.value = freq;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration / 1000);
+
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration / 1000 + 0.04);
+  }, delay);
+}
+
+function playBarcodeSound() {
+  playTone(1250, 90, 0, 0.7, "square");
+  playTone(1550, 90, 95, 0.55, "sine");
+}
+
+function playRegistrationSound() {
+  playTone(659, 150, 0, 0.55, "sine");
+  playTone(880, 150, 140, 0.6, "sine");
+  playTone(1175, 260, 280, 0.65, "triangle");
+}
+
+function playPaymentSound() {
+  playTone(784, 120, 0, 0.65, "sine");
+  playTone(988, 120, 110, 0.7, "sine");
+  playTone(1319, 180, 220, 0.8, "triangle");
+  playTone(1760, 260, 360, 0.58, "sine");
+}
+
+function playInvoiceSound() {
+  playTone(1046, 90, 0, 0.65, "triangle");
+  playTone(1318, 90, 100, 0.65, "triangle");
+  playTone(1568, 200, 210, 0.6, "sine");
+}
+
+function playErrorSound() {
+  playTone(330, 140, 0, 0.6, "sawtooth");
+  playTone(220, 180, 130, 0.55, "sawtooth");
+}
+
+function playClickSound() {
+  playTone(900, 60, 0, 0.35, "sine");
+}
+
+
+setTimeout(() => {
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (typeof playClickSound === "function") playClickSound();
+    });
+  });
+}, 600);
+
+</script>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+    body{
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(2,6,23,.78),rgba(2,6,23,.82)),
+        url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      color:#111827;
+    }
+
+    .navbar{
+      position:sticky;top:0;z-index:10;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(18px);
+      padding:16px 28px;
+      display:flex;justify-content:space-between;align-items:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.12);
+    }
+
+    .brand{display:flex;align-items:center;gap:14px}
+
+    .brand-icon{
+      width:56px;height:56px;border-radius:18px;
+      background:linear-gradient(135deg,#2563eb,#06b6d4);
+      display:flex;align-items:center;justify-content:center;
+      color:white;font-size:26px;box-shadow:0 12px 25px rgba(37,99,235,.35)
+    }
+
+    .brand h1{
+      font-size:28px;font-weight:800;
+      background:linear-gradient(90deg,#1d4ed8,#0891b2);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+
+    .nav-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+    .nav-btn,.submit-btn,.scan-btn,.stop-btn,.pay-btn{
+      border:none;border-radius:15px;padding:13px 20px;
+      font-weight:700;cursor:pointer;transition:.25s;
+    }
+
+    .nav-btn,.submit-btn,.scan-btn,.pay-btn{
+      background:linear-gradient(135deg,#2563eb,#0891b2);
+      color:#fff;box-shadow:0 10px 24px rgba(37,99,235,.25)
+    }
+
+    .stop-btn{background:#fee2e2;color:#b91c1c;margin-top:10px}
+    button:hover{transform:translateY(-2px)}
+
+    .page{display:none;padding:34px 18px}.active{display:block}.container{max-width:1220px;margin:auto}
+
+    .hero-slider{
+      margin-bottom:26px;border-radius:30px;overflow:hidden;
+      background:rgba(255,255,255,.12);backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,.25);
+      color:white;min-height:170px;position:relative;
+    }
+
+    .slide{display:none;padding:34px}.slide.active-slide{display:block;animation:fade .6s ease}
+    .slide h2{font-size:34px;margin-bottom:8px}.slide p{color:#dbeafe;font-size:15px}
+    @keyframes fade{from{opacity:.2;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+
+    .card{
+      background:rgba(255,255,255,.94);backdrop-filter:blur(18px);
+      border-radius:30px;padding:32px;
+      box-shadow:0 20px 45px rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.45)
+    }
+
+    .title{text-align:center;color:#1d4ed8;font-size:32px;font-weight:800}
+    .subtitle{text-align:center;color:#64748b;margin:8px 0 28px}
+
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+    label{display:block;font-weight:600;margin-bottom:8px;color:#334155}
+    input,select{width:100%;padding:14px 16px;border-radius:15px;border:1px solid #dbe3ef;font-size:15px;background:white}
+    input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
+
+    .scanner-row{display:flex;gap:10px;align-items:center}.scanner-row input{flex:1}.scan-btn{white-space:nowrap;padding:14px 16px}
+    #reader{width:100%;max-width:460px;margin-top:14px;border-radius:22px;overflow:hidden;background:white}
+
+    .qr-box{
+      display:none;margin-top:24px;padding:24px;border-radius:24px;text-align:center;
+      background:linear-gradient(135deg,#eff6ff,#ecfeff);
+      border:1px solid #bfdbfe;
+    }
+
+    .qr-box img{width:230px;max-width:100%;border-radius:20px;background:white;padding:12px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+    .timer{font-size:24px;font-weight:800;color:#dc2626;margin:14px 0 8px}
+    .upi-link{font-size:13px;color:#475569;word-break:break-all;margin-top:10px}
+
+    #status{margin-top:18px;text-align:center;font-weight:700;color:#1d4ed8}
+
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:24px}
+    .stat-box{border-radius:26px;padding:26px;color:#fff;background:linear-gradient(135deg,#2563eb,#0891b2);box-shadow:0 14px 30px rgba(37,99,235,.25)}
+    .stat-box h3{font-size:15px;font-weight:500}.stat-box p{font-size:30px;font-weight:800;margin-top:8px}
+
+    .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}.toolbar input,.toolbar select{flex:1;min-width:220px}
+    .table-wrap{overflow-x:auto;border-radius:22px}table{width:100%;border-collapse:collapse;background:white}th{background:linear-gradient(135deg,#2563eb,#0891b2);color:white;padding:15px;text-align:left}td{padding:14px;border-bottom:1px solid #e5eefb}tr:hover{background:#eff6ff}
+
+    .toast{position:fixed;right:20px;bottom:20px;background:white;color:#1d4ed8;padding:16px 22px;border-radius:18px;font-weight:700;box-shadow:0 15px 35px rgba(0,0,0,.22);display:none;z-index:20}
+
+    @media(max-width:760px){
+      .navbar{flex-direction:column;gap:14px}
+      .brand h1{font-size:23px}
+      .card{padding:24px 18px}
+      .slide h2{font-size:25px}
+      .scanner-row{flex-direction:column}
+      .scan-btn{width:100%}
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <span class="logo-text">Flip<span class="plus">+</span></span>
-            </div>
-            
-            <div class="search-bar">
-                <input type="text" placeholder="Search for products, brands and more" id="search-input">
-                <button id="search-btn"><i class="fas fa-search"></i></button>
-            </div>
-            
-            <div class="header-actions">
-                <div class="action-btn">
-                    <div style="position: relative;">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count" id="cart-count">0</span>
-                    </div>
-                    <span>Cart</span>
-                </div>
-                <a href="#" class="login-btn">Login</a>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Categories -->
-        <div class="categories">
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Smartphone with colorful app icons on screen">
-                <span>Mobiles</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Modern gray fabric sofa in a living room">
-                <span>Furniture</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Fashionable woman wearing stylish winter outfit">
-                <span>Fashion</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="High-end gaming laptop with RGB lighting">
-                <span>Electronics</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Fresh fruits and vegetables in a basket">
-                <span>Grocery</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Modern kitchen appliances on countertop">
-                <span>Appliances</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Children playing with colorful toys">
-                <span>Toys</span>
-            </div>
-            <div class="category">
-                <img src="https://placehold.co/60x60" alt="Branded sneakers displayed on shelf">
-                <span>Shoes</span>
-            </div>
-        </div>
-        
-        <!-- Deals Section -->
-        <div class="deals-section">
-            <div class="section-title">
-                <h2>Deals of the Day</h2>
-                <a href="#" class="view-all">VIEW ALL</a>
-            </div>
-            
-            <div class="deals-container">
-                <div class="deal-item" data-id="1">
-                    <img src="https://placehold.co/200x150" alt="Wireless Bluetooth headphones with microphone" class="deal-img">
-                    <div class="deal-title">Boat Rockerz 450 Wireless Headphones</div>
-                    <div class="deal-price">₹1,299</div>
-                    <div class="deal-discount">60% off</div>
-                    <div class="deal-desc">10 offers</div>
-                </div>
-                
-                <div class="deal-item" data-id="2">
-                    <img src="https://placehold.co/200x150" alt="Latest model smartphone with dual camera setup" class="deal-img">
-                    <div class="deal-title">OnePlus Nord CE 3 Lite 5G</div>
-                    <div class="deal-price">₹19,999</div>
-                    <div class="deal-discount">17% off</div>
-                    <div class="deal-desc">15 offers</div>
-                </div>
-                
-                <div class="deal-item" data-id="3">
-                    <img src="https://placehold.co/200x150" alt="Premium automatic washing machine with digital display" class="deal-img">
-                    <div class="deal-title">Samsung 7.5 kg Fully Automatic</div>
-                    <div class="deal-price">₹24,990</div>
-                    <div class="deal-discount">27% off</div>
-                    <div class="deal-desc">12 offers</div>
-                </div>
-                
-                <div class="deal-item" data-id="4">
-                    <img src="https://placehold.co/200x150" alt="Set of 6 ceramic dinner plates and bowls" class="deal-img">
-                    <div class="deal-title">Cello Melamine Dinner Set</div>
-                    <div class="deal-price">₹799</div>
-                    <div class="deal-discount">45% off</div>
-                    <div class="deal-desc">5 offers</div>
-                </div>
-                
-                <div class="deal-item" data-id="5">
-                    <img src="https://placehold.co/200x150" alt="Leather crossbody bag for women in tan color" class="deal-img">
-                    <div class="deal-title">Hidesign Leather Handbag</div>
-                    <div class="deal-price">₹3,999</div>
-                    <div class="deal-discount">55% off</div>
-                    <div class="deal-desc">8 offers</div>
-                </div>
-                
-                <div class="deal-item" data-id="6">
-                    <img src="https://placehold.co/200x150" alt="Men's athletic running shoes in blue and white" class="deal-img">
-                    <div class="deal-title">Nike Revolution 6 Running Shoes</div>
-                    <div class="deal-price">₹2,999</div>
-                    <div class="deal-discount">40% off</div>
-                    <div class="deal-desc">10 offers</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Products Section -->
-        <div class="section-title">
-            <h2>Trending Products</h2>
-            <a href="#" class="view-all">VIEW ALL</a>
-        </div>
-        
-        <div class="products-container">
-            <div class="product-card" data-id="7">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="Smartwatch with health tracking features" class="product-img">
-                </div>
-                <div class="product-title">Noise ColorFit Pulse Grand Smart Watch</div>
-                <div class="product-price">
-                    <span class="current-price">₹2,499</span>
-                    <span class="original-price">₹4,999</span>
-                    <span class="discount">50% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.2</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-            
-            <div class="product-card" data-id="8">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="DSLR camera with lens kit" class="product-img">
-                </div>
-                <div class="product-title">Canon EOS 1500D DSLR Camera</div>
-                <div class="product-price">
-                    <span class="current-price">₹31,990</span>
-                    <span class="original-price">₹40,000</span>
-                    <span class="discount">20% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.5</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-            
-            <div class="product-card" data-id="9">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="LED smart TV with remote control" class="product-img">
-                </div>
-                <div class="product-title">Mi 5A 108 cm (43 inch) Full HD Smart LED TV</div>
-                <div class="product-price">
-                    <span class="current-price">₹22,999</span>
-                    <span class="original-price">₹30,999</span>
-                    <span class="discount">25% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.1</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-            
-            <div class="product-card" data-id="10">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="Electric air fryer with digital controls" class="product-img">
-                </div>
-                <div class="product-title">Philips Digital Air Fryer HD9252/90</div>
-                <div class="product-price">
-                    <span class="current-price">₹8,999</span>
-                    <span class="original-price">₹12,995</span>
-                    <span class="discount">30% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.3</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-            
-            <div class="product-card" data-id="11">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="Premium leather wallet with multiple card slots" class="product-img">
-                </div>
-                <div class="product-title">American Tourister PU Wallet</div>
-                <div class="product-price">
-                    <span class="current-price">₹599</span>
-                    <span class="original-price">₹1,299</span>
-                    <span class="discount">53% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.0</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-            
-            <div class="product-card" data-id="12">
-                <div class="product-img-container">
-                    <img src="https://placehold.co/200x200" alt="Wireless keyboard and mouse combo" class="product-img">
-                </div>
-                <div class="product-title">Logitech MK235 Wireless Keyboard Mouse Combo</div>
-                <div class="product-price">
-                    <span class="current-price">₹1,499</span>
-                    <span class="original-price">₹2,195</span>
-                    <span class="discount">31% off</span>
-                </div>
-                <div class="rating">
-                    <span>4.2</span>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="delivery">Free delivery</div>
-            </div>
-        </div>
+
+  <div class="navbar">
+    <div class="brand">
+      <div class="brand-icon">🔋</div>
+      <h1>BHATI BATTERY</h1>
     </div>
-    
-    <!-- Cart Modal -->
-    <div class="modal-overlay" id="cart-modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-title">My Cart (3)</div>
-                <button class="close-btn" id="close-cart">&times;</button>
-            </div>
-            
-            <div class="cart-items" id="cart-items">
-                <!-- Cart items will be added here -->
-            </div>
-            
-            <div class="cart-summary">
-                <div class="total">
-                    <span class="total-label">Total</span>
-                    <span class="total-amount">₹5,997</span>
-                </div>
-                <button class="checkout-btn">PLACE ORDER</button>
-            </div>
-        </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="showPage('registerPage')">Registration</button>
+      <button class="nav-btn" onclick="showPage('recordsPage'); loadData();">Customer Records</button>
     </div>
-    
-    <!-- Product Details Modal -->
-    <div class="modal-overlay product-modal" id="product-modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-title">Product Details</div>
-                <button class="close-btn" id="close-product">&times;</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <section id="registerPage" class="page active">
+    <div class="container">
+      <div class="hero-slider">
+        <div class="slide active-slide"><h2>Smart Battery Registration</h2><p>Scan barcode, collect payments, and save customer data professionally.</p></div>
+        <div class="slide"><h2>Dynamic UPI QR System</h2><p>QR automatically shows the entered amount in customer's UPI app.</p></div>
+        <div class="slide"><h2>Advanced Customer Dashboard</h2><p>Search, sort, monthly total, and financial year total.</p></div>
+      </div>
+
+      <div class="card">
+        <h2 class="title">Battery Registration Details</h2>
+        <p class="subtitle">Advanced professional registration panel</p>
+
+        <form id="registrationForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Customer Name</label>
+              <input type="text" id="customerName" required minlength="3" placeholder="Enter customer name">
             </div>
-            
-            <div class="product-details">
-                <div class="product-gallery">
-                    <img src="https://placehold.co/400x400" alt="Wireless Bluetooth headphones with microphone and ear cushions" class="main-image">
-                    <div class="thumbnails">
-                        <img src="https://placehold.co/60x60" alt="Headphones side view showing ear cushions" class="thumbnail">
-                        <img src="https://placehold.co/60x60" alt="Headphones folded for portability" class="thumbnail">
-                        <img src="https://placehold.co/60x60" alt="Headphones with charging cable" class="thumbnail">
-                        <img src="https://placehold.co/60x60" alt="Headphones with carrying case" class="thumbnail">
-                    </div>
-                </div>
-                
-                <div class="product-info">
-                    <h1 class="product-name">Boat Rockerz 450 Wireless Headphones</h1>
-                    <p class="product-subtitle">Wireless Over Ear Headphones with Mic, Upto 15 Hours Playback, 40MM Drivers, Bluetooth V5.0 and Voice Assistant (Black)</p>
-                    
-                    <div class="product-rating">
-                        <div class="rating">
-                            <span>4.2</span>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <span class="rating-text">2,345 Ratings & 723 Reviews</span>
-                    </div>
-                    
-                    <div class="price-container">
-                        <div class="selected-price">₹1,299</div>
-                        <div class="inclusive">(Inclusive of all taxes)</div>
-                    </div>
-                    
-                    <div class="offers">
-                        <h3 class="offer-title">Available offers</h3>
-                        <div class="offer-item">
-                            <i class="fas fa-tag offer-icon"></i>
-                            <span>Special Price Get extra 10% off (price inclusive of discount) T&C</span>
-                        </div>
-                        <div class="offer-item">
-                            <i class="fas fa-percentage offer-icon"></i>
-                            <span>Bank Offer 5% Cashback on Flipkart Axis Bank Card T&C</span>
-                        </div>
-                        <div class="offer-item">
-                            <i class="fas fa-rupee-sign offer-icon"></i>
-                            <span>Partner Offer Sign up for Flipkart Pay Later and get Flipkart Gift Card worth ₹100*</span>
-                        </div>
-                    </div>
-                    
-                    <button class="add-to-cart-btn" id="add-to-cart">ADD TO CART</button>
-                </div>
+
+            <div class="form-group">
+              <label>Battery Model / Barcode</label>
+              <div class="scanner-row">
+                <input type="text" id="batteryModel" required placeholder="Scan or enter battery model">
+                <button type="button" class="scan-btn" onclick="startScanner()">📷 Scan</button>
+              </div>
+              <div id="reader"></div>
+              <button type="button" class="stop-btn" id="stopScanBtn" onclick="stopScanner()" style="display:none;">Stop Scanner</button>
             </div>
-        </div>
+
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" id="mobile" pattern="[0-9]{10}" maxlength="10" required placeholder="10 digit mobile number">
+            </div>
+
+            <div class="form-group">
+              <label>Date & Time</label>
+              <input type="text" id="date" readonly required placeholder="DD/MM/YYYY HH:MM:SS">
+            </div>
+
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" id="amount" min="1" required placeholder="Enter amount">
+            </div>
+
+            <div class="form-group">
+              <label>Payment Received</label>
+              <select id="paymentMode" required onchange="handlePaymentMode()">
+                <option value="">Select Payment Mode</option>
+                <option value="Cash">Cash</option>
+                <option value="Online">Online</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="qr-box" id="qrBox">
+            <h3 style="color:#1d4ed8;margin-bottom:12px;">Scan QR to Pay</h3>
+            <img id="paymentQR" alt="BHATI BATTERY UPI QR">
+            <div class="timer" id="paymentTimer">10:00</div>
+            <p style="color:#475569;font-size:14px;">Complete payment within 10 minutes</p>
+            <p class="upi-link" id="upiText"></p>
+            <br>
+            <button type="button" class="pay-btn" onclick="markPaymentReceived()">✅ Payment Received</button>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Registration</button>
+          <div id="status"></div>
+        </form>
+      </div>
     </div>
-    
-    <script>
-        // Sample product data
-        const products = [
-            {
-                id: 1,
-                title: "Boat Rockerz 450 Wireless Headphones",
-                price: 1299,
-                originalPrice: 3299,
-                image: "https://placehold.co/200x150",
-                alt: "Wireless Bluetooth headphones with microphone"
-            },
-            {
-                id: 2,
-                title: "OnePlus Nord CE 3 Lite 5G",
-                price: 19999,
-                originalPrice: 23999,
-                image: "https://placehold.co/200x150",
-                alt: "Latest model smartphone with dual camera setup"
-            },
-            {
-                id: 3,
-                title: "Samsung 7.5 kg Fully Automatic",
-                price: 24990,
-                originalPrice: 33990,
-                image: "https://placehold.co/200x150",
-                alt: "Premium automatic washing machine with digital display"
-            },
-            {
-                id: 4,
-                title: "Cello Melamine Dinner Set",
-                price: 799,
-                originalPrice: 1499,
-                image: "https://placehold.co/200x150",
-                alt: "Set of 6 ceramic dinner plates and bowls"
-            },
-            {
-                id: 5,
-                title: "Hidesign Leather Handbag",
-                price: 3999,
-                originalPrice: 8999,
-                image: "https://placehold.co/200x150",
-                alt: "Leather crossbody bag for women in tan color"
-            },
-            {
-                id: 6,
-                title: "Nike Revolution 6 Running Shoes",
-                price: 2999,
-                originalPrice: 4999,
-                image: "https://placehold.co/200x150",
-                alt: "Men's athletic running shoes in blue and white"
-            },
-            {
-                id: 7,
-                title: "Noise ColorFit Pulse Grand Smart Watch",
-                price: 2499,
-                originalPrice: 4999,
-                image: "https://placehold.co/200x200",
-                alt: "Smartwatch with health tracking features"
-            },
-            {
-                id: 8,
-                title: "Canon EOS 1500D DSLR Camera",
-                price: 31990,
-                originalPrice: 40000,
-                image: "https://placehold.co/200x200",
-                alt: "DSLR camera with lens kit"
-            },
-            {
-                id: 9,
-                title: "Mi 5A 108 cm (43 inch) Full HD Smart LED TV",
-                price: 22999,
-                originalPrice: 30999,
-                image: "https://placehold.co/200x200",
-                alt: "LED smart TV with remote control"
-            },
-            {
-                id: 10,
-                title: "Philips Digital Air Fryer HD9252/90",
-                price: 8999,
-                originalPrice: 12995,
-                image: "https://placehold.co/200x200",
-                alt: "Electric air fryer with digital controls"
-            },
-            {
-                id: 11,
-                title: "American Tourister PU Wallet",
-                price: 599,
-                originalPrice: 1299,
-                image: "https://placehold.co/200x200",
-                alt: "Premium leather wallet with multiple card slots"
-            },
-            {
-                id: 12,
-                title: "Logitech MK235 Wireless Keyboard Mouse Combo",
-                price: 1499,
-                originalPrice: 2195,
-                image: "https://placehold.co/200x200",
-                alt: "Wireless keyboard and mouse combo"
-            }
-        ];
-        
-        // Cart functionality
-        let cart = [];
-        
-        // DOM Elements
-        const cartBtn = document.querySelector('.action-btn');
-        const cartModal = document.getElementById('cart-modal');
-        const closeCartBtn = document.getElementById('close-cart');
-        const cartItemsContainer = document.getElementById('cart-items');
-        const cartCount = document.getElementById('cart-count');
-        const productModal = document.getElementById('product-modal');
-        const closeProductBtn = document.getElementById('close-product');
-        const addToCartBtn = document.getElementById('add-to-cart');
-        const searchInput = document.getElementById('search-input');
-        const searchBtn = document.getElementById('search-btn');
-        const dealItems = document.querySelectorAll('.deal-item');
-        const productCards = document.querySelectorAll('.product-card');
-        
-        // Event Listeners
-        cartBtn.addEventListener('click', toggleCart);
-        closeCartBtn.addEventListener('click', toggleCart);
-        closeProductBtn.addEventListener('click', toggleProductModal);
-        addToCartBtn.addEventListener('click', addToCartFromModal);
-        searchBtn.addEventListener('click', searchProducts);
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchProducts();
-            }
-        });
-        
-        // Add click events to deal items
-        dealItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const productId = parseInt(this.getAttribute('data-id'));
-                showProductDetails(productId);
-            });
-        });
-        
-        // Add click events to product cards
-        productCards.forEach(card => {
-            card.addEventListener('click', function() {
-                const productId = parseInt(this.getAttribute('data-id'));
-                showProductDetails(productId);
-            });
-        });
-        
-        // Functions
-        function toggleCart() {
-            cartModal.classList.toggle('active');
-            if (cartModal.classList.contains('active')) {
-                renderCartItems();
-            }
-        }
-        
-        function toggleProductModal() {
-            productModal.classList.toggle('active');
-        }
-        
-        function showProductDetails(productId) {
-            // In a real app, we would fetch product details by ID from backend
-            // Here we'll just show the modal with sample data
-            productModal.classList.add('active');
-        }
-        
-        function addToCartFromModal() {
-            // Add sample item to cart when "Add to Cart" is clicked
-            if (cart.length === 0) {
-                addToCart(1); // Add product ID 1 as a sample
-                alert('Product added to cart!');
-                productModal.classList.remove('active');
-            } else {
-                // In a real app, you would add the product being viewed
-                alert('You already have items in your cart!');
-            }
-        }
-        
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                const existingItem = cart.find(item => item.id === productId);
-                
-                if (existingItem) {
-                    existingItem.quantity += 1;
-                } else {
-                    cart.push({
-                        id: product.id,
-                        title: product.title,
-                        price: product.price,
-                        image: product.image,
-                        alt: product.alt,
-                        quantity: 1
-                    });
-                }
-                
-                updateCartCount();
-                renderCartItems();
-            }
-        }
-        
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartCount();
-            renderCartItems();
-        }
-        
-        function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCount.textContent = count;
-        }
-        
-        function calculateTotal() {
-            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        }
-        
-        function renderCartItems() {
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `
-                    <div class="empty-cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h3>Your cart is empty</h3>
-                        <p>Add items to get started</p>
-                    </div>
-                `;
-                document.querySelector('.total-amount').textContent = '₹0';
-                document.querySelector('.modal-title').textContent = 'My Cart (0)';
-            } else {
-                cartItemsContainer.innerHTML = '';
-                
-                cart.forEach(item => {
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
-                    cartItem.innerHTML = `
-                        <img src="${item.image}" alt="${item.alt}" class="cart-item-img">
-                        <div class="cart-item-details">
-                            <div class="cart-item-title">${item.title}</div>
-                            <div class="cart-item-price">₹${item.price.toLocaleString()}</div>
-                            <div class="quantity-controls">
-                                <button class="quantity-btn minus" data-id="${item.id}">-</button>
-                                <span class="quantity">${item.quantity}</span>
-                                <button class="quantity-btn plus" data-id="${item.id}">+</button>
-                            </div>
-                            <div class="remove-btn" data-id="${item.id}">REMOVE</div>
-                        </div>
-                    `;
-                    cartItemsContainer.appendChild(cartItem);
-                });
-                
-                // Update cart header and total
-                const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-                document.querySelector('.modal-title').textContent = `My Cart (${totalItems})`;
-                document.querySelector('.total-amount').textContent = `₹${calculateTotal().toLocaleString()}`;
-                
-                // Add event listeners to quantity controls
-                document.querySelectorAll('.minus').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = parseInt(this.getAttribute('data-id'));
-                        const item = cart.find(item => item.id === productId);
-                        
-                        if (item.quantity > 1) {
-                            item.quantity -= 1;
-                            renderCartItems();
-                        }
-                    });
-                });
-                
-                document.querySelectorAll('.plus').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = parseInt(this.getAttribute('data-id'));
-                        const item = cart.find(item => item.id === productId);
-                        item.quantity += 1;
-                        renderCartItems();
-                    });
-                });
-                
-                document.querySelectorAll('.remove-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = parseInt(this.getAttribute('data-id'));
-                        removeFromCart(productId);
-                    });
-                });
-            }
-        }
-        
-        function searchProducts() {
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            
-            if (searchTerm === '') {
-                alert('Please enter a search term');
-                return;
-            }
-            
-            // In a real app, we would make an API call to search products
-            console.log(`Searching for: ${searchTerm}`);
-            
-            // For demo purposes, we'll just show an alert
-            alert(`Search functionality would show results for: ${searchTerm}`);
-        }
-        
-        // Add initial items to cart for demo
-        addToCart(1);
-        addToCart(2);
-        addToCart(6);
-    </script>
+  </section>
+
+  <section id="recordsPage" class="page">
+    <div class="container">
+      <div class="stats">
+        <div class="stat-box"><h3>Total Customers</h3><p id="totalCustomers">0</p></div>
+        <div class="stat-box"><h3>Total Amount</h3><p id="totalAmount">₹0</p></div>
+        <div class="stat-box"><h3>This Month Total</h3><p id="monthlyTotal">₹0</p></div>
+        <div class="stat-box"><h3>Financial Year Total</h3><p id="financialTotal">₹0</p></div>
+      </div>
+
+      <div class="card">
+        <h2 class="title">Registered Customer Details</h2>
+        <p class="subtitle">Live Google Sheets records with search and sorting</p>
+
+        <div class="toolbar">
+          <input type="text" id="searchInput" placeholder="Search customer, mobile, model..." onkeyup="searchTable()">
+          <select id="sortSelect" onchange="sortTable()">
+            <option value="default">Sort Data</option>
+            <option value="name">Customer Name</option>
+            <option value="mobile">Mobile Number</option>
+            <option value="amount">Amount</option>
+            <option value="date">Date</option>
+            <option value="paymentMode">Payment Mode</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer Name</th><th>Battery Model</th><th>Mobile Number</th><th>Date & Time</th><th>Amount</th><th>Payment Mode</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+  const scriptURL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+  const upiBaseLink = 'upi://pay?pa=7240610313@pthdfc&pn=Mohd Sohail&cu=INR';
+
+  let allData = [];
+  let qrScanner = null;
+  let scannerRunning = false;
+  let paymentInterval = null;
+  let paymentReceived = false;
+
+  function updateDateTime(){
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2,'0');
+    const month = String(now.getMonth() + 1).padStart(2,'0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2,'0');
+    const minutes = String(now.getMinutes()).padStart(2,'0');
+    const seconds = String(now.getSeconds()).padStart(2,'0');
+
+    document.getElementById('date').value =
+      `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
+
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+
+  function updatePaymentQR(){
+    const amount = document.getElementById('amount').value;
+    let finalUpiLink = upiBaseLink;
+
+    if(amount && Number(amount) > 0){
+      finalUpiLink += '&am=' + encodeURIComponent(amount);
+    }
+
+    const qrImageURL =
+      'https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=' +
+      encodeURIComponent(finalUpiLink);
+
+    document.getElementById('paymentQR').src = qrImageURL;
+    document.getElementById('upiText').innerText = finalUpiLink;
+  }
+
+  updatePaymentQR();
+  document.getElementById('amount').addEventListener('input', updatePaymentQR);
+
+  function playTone(freq, duration, volume = 1){
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.frequency.value = freq;
+    oscillator.type = 'sine';
+
+    gain.gain.setValueAtTime(volume, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration / 1000);
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + duration / 1000);
+  }
+
+  function playSubmitSuccessSound(){
+    const notes = [784, 988, 1318, 1568];
+    notes.forEach((freq, index) => {
+      setTimeout(() => playTone(freq, 230, 1), index * 120);
+    });
+  }
+
+  function playBarcodeSound(){
+    playTone(1000, 120, 1);
+    setTimeout(() => playTone(1300, 120, 1), 130);
+  }
+
+  function showToast(message){
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.style.display = 'block';
+    setTimeout(()=> toast.style.display='none', 2500);
+  }
+
+  setInterval(() => {
+    const slides = document.querySelectorAll('.slide');
+    const current = document.querySelector('.active-slide');
+    let index = Array.from(slides).indexOf(current);
+
+    current.classList.remove('active-slide');
+    slides[(index + 1) % slides.length].classList.add('active-slide');
+  }, 3500);
+
+  function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  async function startScanner(){
+    if(scannerRunning) return;
+
+    if(!window.Html5Qrcode){
+      alert('Scanner library not loaded. Check internet connection.');
+      return;
+    }
+
+    scannerRunning = true;
+    document.getElementById('stopScanBtn').style.display = 'inline-block';
+    document.getElementById('reader').innerHTML = '';
+    qrScanner = new Html5Qrcode('reader');
+
+    try{
+      await qrScanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 280, height: 140 } },
+        async (decodedText) => {
+          document.getElementById('batteryModel').value = decodedText;
+          playBarcodeSound();
+          playBarcodeSound();
+          showToast('Barcode scanned successfully');
+          await stopScanner();
+        },
+        () => {}
+      );
+    }catch(error){
+      scannerRunning = false;
+      document.getElementById('stopScanBtn').style.display = 'none';
+      playErrorSound();
+      alert('Camera permission denied or scanner needs HTTPS/localhost.');
+    }
+  }
+
+  async function stopScanner(){
+    try{
+      if(qrScanner && scannerRunning){
+        await qrScanner.stop();
+        await qrScanner.clear();
+      }
+    }catch(e){}
+
+    scannerRunning = false;
+    document.getElementById('reader').innerHTML = '';
+    document.getElementById('stopScanBtn').style.display = 'none';
+  }
+
+  function handlePaymentMode(){
+    const mode = document.getElementById('paymentMode').value;
+    const qrBox = document.getElementById('qrBox');
+
+    if(mode === 'Online'){
+      updatePaymentQR();
+      qrBox.style.display = 'block';
+      paymentReceived = false;
+      startPaymentTimer(10 * 60);
+    } else {
+      qrBox.style.display = 'none';
+      clearInterval(paymentInterval);
+      document.getElementById('paymentTimer').innerText = '10:00';
+      paymentReceived = mode === 'Cash';
+    }
+  }
+
+  function startPaymentTimer(seconds){
+    clearInterval(paymentInterval);
+    let remaining = seconds;
+
+    paymentInterval = setInterval(() => {
+      const min = Math.floor(remaining / 60);
+      const sec = remaining % 60;
+
+      document.getElementById('paymentTimer').innerText =
+        `${min}:${sec < 10 ? '0' : ''}${sec}`;
+
+      if(remaining <= 0){
+        clearInterval(paymentInterval);
+        document.getElementById('paymentTimer').innerText = 'Time Expired';
+        showToast('Payment time expired');
+      }
+
+      remaining--;
+    }, 1000);
+  }
+
+  function markPaymentReceived(){
+    paymentReceived = true;
+    clearInterval(paymentInterval);
+
+    document.getElementById('paymentTimer').innerText = 'Payment Received';
+
+    playPaymentSound();
+    playPaymentSound();
+    showToast('Online payment received successfully');
+
+    setTimeout(() => {
+      document.getElementById('qrBox').style.display = 'none';
+      document.getElementById('paymentTimer').innerText = '10:00';
+    }, 1200);
+  }
+
+  document.getElementById('registrationForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const paymentMode = document.getElementById('paymentMode').value;
+
+    if(paymentMode === 'Online' && !paymentReceived){
+      playErrorSound();
+      alert('Please confirm online payment received first.');
+      return;
+    }
+
+    const status = document.getElementById('status');
+    status.innerHTML = 'Submitting...';
+
+    const data = {
+      customerName: document.getElementById('customerName').value,
+      batteryModel: document.getElementById('batteryModel').value,
+      mobile: document.getElementById('mobile').value,
+      date: document.getElementById('date').value,
+      amount: document.getElementById('amount').value,
+      paymentMode: paymentMode
+    };
+
+    try{
+      const response = await fetch(scriptURL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      status.innerHTML = result.message || 'Submitted Successfully';
+      playRegistrationSound();
+      playRegistrationSound();
+      showToast('Registration submitted successfully');
+
+      this.reset();
+      updateDateTime();
+      updatePaymentQR();
+
+      document.getElementById('qrBox').style.display = 'none';
+      clearInterval(paymentInterval);
+      paymentReceived = false;
+
+    }catch(error){
+      status.innerHTML = 'Connection Failed';
+    }
+  });
+
+  async function loadData(){
+    try{
+      const response = await fetch(scriptURL);
+      allData = await response.json();
+      renderTable(allData);
+    }catch(error){
+      playErrorSound();
+      alert('Unable To Load Customer Records');
+    }
+  }
+
+  function formatDateForDisplay(value){
+    if(!value) return '';
+
+    const text = String(value);
+
+    if(text.includes('/') && text.includes(':')){
+      return text;
+    }
+
+    let dateObj;
+
+    if(text.includes('/')){
+      const datePart = text.split(' ')[0];
+      const timePart = text.split(' ')[1] || '00:00:00';
+      const parts = datePart.split('/');
+
+      if(parts.length === 3){
+        dateObj = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T${timePart}`);
+      }
+    } else {
+      dateObj = new Date(text);
+    }
+
+    if(!dateObj || isNaN(dateObj.getTime())){
+      return text;
+    }
+
+    const day = String(dateObj.getDate()).padStart(2,'0');
+    const month = String(dateObj.getMonth() + 1).padStart(2,'0');
+    const year = dateObj.getFullYear();
+
+    const hours = String(dateObj.getHours()).padStart(2,'0');
+    const minutes = String(dateObj.getMinutes()).padStart(2,'0');
+    const seconds = String(dateObj.getSeconds()).padStart(2,'0');
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
+
+  function parseRecordDate(value){
+    const formatted = formatDateForDisplay(value);
+    const datePart = formatted.split(' ')[0];
+    const timePart = formatted.split(' ')[1] || '00:00:00';
+
+    const parts = datePart.split('/');
+
+    if(parts.length !== 3){
+      return new Date(value);
+    }
+
+    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}T${timePart}`);
+  }
+
+  function renderTable(data){
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    let totalAmount = 0;
+    let monthlyTotal = 0;
+    let financialTotal = 0;
+
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const fyStart = currentMonth >= 3 ? currentYear : currentYear - 1;
+
+    data.forEach(item=>{
+      const amount = Number(item.amount) || 0;
+      totalAmount += amount;
+
+      const displayDate = formatDateForDisplay(item.date);
+      const d = parseRecordDate(item.date);
+
+      if(d.getMonth() === currentMonth && d.getFullYear() === currentYear){
+        monthlyTotal += amount;
+      }
+
+      if(
+        (d.getFullYear() === fyStart && d.getMonth() >= 3) ||
+        (d.getFullYear() === fyStart + 1 && d.getMonth() <= 2)
+      ){
+        financialTotal += amount;
+      }
+
+      tableBody.innerHTML += `<tr>
+        <td>${item.customerName || ''}</td>
+        <td>${item.batteryModel || ''}</td>
+        <td>${item.mobile || ''}</td>
+        <td>${displayDate}</td>
+        <td>₹${amount}</td>
+        <td>${item.paymentMode || ''}</td>
+      </tr>`;
+    });
+
+    document.getElementById('totalCustomers').innerHTML = data.length;
+    document.getElementById('totalAmount').innerHTML = '₹' + totalAmount;
+    document.getElementById('monthlyTotal').innerHTML = '₹' + monthlyTotal;
+    document.getElementById('financialTotal').innerHTML = '₹' + financialTotal;
+  }
+
+  function searchTable(){
+    const value = document.getElementById('searchInput').value.toLowerCase();
+
+    const filtered = allData.filter(item =>
+      Object.values(item).join(' ').toLowerCase().includes(value)
+    );
+
+    renderTable(filtered);
+  }
+
+  function sortTable(){
+    const value = document.getElementById('sortSelect').value;
+    let sorted = [...allData];
+
+    if(value === 'name'){
+      sorted.sort((a,b)=>(a.customerName || '').localeCompare(b.customerName || ''));
+    }
+
+    if(value === 'mobile'){
+      sorted.sort((a,b)=>Number(a.mobile) - Number(b.mobile));
+    }
+
+    if(value === 'amount'){
+      sorted.sort((a,b)=>Number(a.amount) - Number(b.amount));
+    }
+
+    if(value === 'date'){
+      sorted.sort((a,b)=>parseRecordDate(a.date) - parseRecordDate(b.date));
+    }
+
+    if(value === 'paymentMode'){
+      sorted.sort((a,b)=>(a.paymentMode || '').localeCompare(b.paymentMode || ''));
+    }
+
+    renderTable(sorted);
+  }
+</script>
 </body>
 </html>
-```
